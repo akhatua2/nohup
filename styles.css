@@ -1,0 +1,75 @@
+.floating-toolbar {
+    position: fixed;
+    z-index: 999999;
+    width: 32px;
+    height: 32px;
+    background: #111111;
+    border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25), 0 8px 16px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s;
+}
+
+.floating-toolbar:hover {
+    transform: scale(1.05);
+}
+
+.floating-toolbar.dragging {
+    opacity: 0.9;
+    cursor: move;
+    transition: none;
+}
+
+.floating-toolbar:not(.dragging) {
+    transition: left 0.2s ease-out, top 0.2s ease-out;
+}
+
+.toolbar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.menu-container {
+    position: fixed;
+    z-index: 999998;
+    background: #1a1a1a;
+    border-radius: 8px;
+    width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: none;
+    padding: 8px;
+}
+
+.menu-container.visible {
+    display: block;
+}
+
+.menu-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 2px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.menu-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-option img {
+    width: 16px;
+    height: 16px;
+} 
