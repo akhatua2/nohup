@@ -13,16 +13,19 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "css": ["styles.css", "comment/comment.css"],
+      "css": [
+        "src/styles/styles.css",
+        "src/components/comment/comment.css"
+      ],
       "js": [
-        "icons.js",
-        "drag.js",
-        "menu-utils.js",
-        "comment/component-marker.js",
-        "comment/anchor.js",
-        "comment/comment.js",
-        "menu.js",
-        "content.js"
+        "src/utils/icons.js",
+        "src/utils/drag.js",
+        "src/utils/menu-utils.js",
+        "src/components/comment/component-marker.js",
+        "src/components/comment/anchor.js",
+        "src/components/comment/comment.js",
+        "src/components/menu/menu.js",
+        "src/content.js"
       ],
       "run_at": "document_end"
     }
