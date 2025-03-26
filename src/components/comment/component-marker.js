@@ -45,10 +45,48 @@ function clearHighlight() {
     }
 }
 
+// Find a component using saved component info
+function findComponentByInfo(componentInfo) {
+    // Try finding by ID first
+    if (componentInfo.id && componentInfo.id !== 'no-id') {
+        const elementById = document.getElementById(componentInfo.id);
+        if (elementById) return elementById;
+    }
+
+    // Try finding by class if ID not found
+    if (componentInfo.classes && componentInfo.classes !== 'no-classes') {
+        const classSelector = componentInfo.classes.split(' ')
+            .map(cls => '.' + cls)
+            .join('');
+        const elementsByClass = document.querySelectorAll(`${componentInfo.tagName}${classSelector}`);
+        
+        // If there's only one element with these classes, return it
+        if (elementsByClass.length === 1) return elementsByClass[0];
+        
+        // If multiple elements found, try matching by text content
+        if (elementsByClass.length > 1 && componentInfo.textContent) {
+            return Array.from(elementsByClass).find(el => 
+                el.textContent.includes(componentInfo.textContent.slice(0, 50))
+            );
+        }
+    }
+
+    // Fallback: try finding by tag and text content
+    if (componentInfo.textContent) {
+        const elements = document.getElementsByTagName(componentInfo.tagName);
+        return Array.from(elements).find(el => 
+            el.textContent.includes(componentInfo.textContent.slice(0, 50))
+        );
+    }
+
+    return null;
+}
+
 // Export the functionality
 window.ComponentMarker = {
     start: startComponentMarking,
     stop: stopComponentMarking,
     clear: clearHighlight,
-    findNearestComponent
+    findNearestComponent,
+    findComponentByInfo
 }; 

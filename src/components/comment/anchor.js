@@ -2,13 +2,19 @@
 const anchoredComments = new Map(); // Map<comment element, anchor data>
 
 // Create an anchor for a comment at the clicked position
-function anchorComment(comment, targetComponent, clickX, clickY) {
+function anchorComment(comment, targetComponent, clickX, clickY, useRelativeCoords = false) {
     // Get the component's position
     const componentRect = targetComponent.getBoundingClientRect();
     
-    // Calculate relative position within the component
-    const relativeX = clickX - componentRect.left;
-    const relativeY = clickY - componentRect.top;
+    // Use provided coordinates directly if they are relative, otherwise calculate them
+    const relativeX = useRelativeCoords ? clickX : clickX - componentRect.left;
+    const relativeY = useRelativeCoords ? clickY : clickY - componentRect.top;
+    
+    console.log('Anchoring comment with coordinates:', {
+        useRelativeCoords,
+        provided: { x: clickX, y: clickY },
+        calculated: { relativeX, relativeY }
+    });
     
     // Store the anchor data
     anchoredComments.set(comment, {

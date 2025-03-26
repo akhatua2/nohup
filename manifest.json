@@ -19,10 +19,12 @@
       ],
       "js": [
         "src/utils/icons.js",
+        "src/utils/api.js",
         "src/utils/drag.js",
         "src/utils/menu-utils.js",
         "src/components/comment/component-marker.js",
         "src/components/comment/anchor.js",
+        "src/components/comment/comment-loader.js",
         "src/components/comment/comment.js",
         "src/components/menu/menu.js",
         "src/content.js"
