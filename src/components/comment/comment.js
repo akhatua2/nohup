@@ -12,7 +12,7 @@ window.enableCommentMode = function() {
     ComponentMarker.start();
     
     // One-time click handler for placing the comment
-    const clickHandler = (e) => {
+    const clickHandler = async (e) => {
         console.log('Click handler triggered, isCommentMode:', isCommentMode);
         if (!isCommentMode) return;
         
@@ -30,19 +30,40 @@ window.enableCommentMode = function() {
         if (!targetComponent) return;
         
         // Log component details
-        console.log('Anchoring comment to component:', {
+        const componentInfo = {
             tagName: targetComponent.tagName.toLowerCase(),
             id: targetComponent.id || 'no-id',
             classes: Array.from(targetComponent.classList).join(' ') || 'no-classes',
-            text: targetComponent.textContent.slice(0, 50) + (targetComponent.textContent.length > 50 ? '...' : '')
-        });
+            textContent: targetComponent.textContent.slice(0, 50) + (targetComponent.textContent.length > 50 ? '...' : '')
+        };
+        console.log('Anchoring comment to component:', componentInfo);
         
         const comment = document.createElement('div');
         comment.className = 'floating-comment';
         comment.innerHTML = `<img src="${ICONS.COMMENT}" width="16" height="16" alt="Comment">`;
         document.body.appendChild(comment);
         
-        // Anchor the comment to the component
+        // Position data for the comment
+        const componentRect = targetComponent.getBoundingClientRect();
+        const position = {
+            relativeX: e.clientX - componentRect.left,
+            relativeY: e.clientY - componentRect.top
+        };
+        
+        // Save comment to backend
+        try {
+            const savedComment = await CommentAPI.createComment(
+                window.location.href,
+                componentInfo,
+                position,
+                "Add your comment here" // TODO: Add comment input UI
+            );
+            console.log('Comment saved:', savedComment);
+        } catch (error) {
+            console.error('Failed to save comment:', error);
+        }
+        
+        // Anchor the comment to the component using the same relative coordinates
         CommentAnchor.anchor(comment, targetComponent, e.clientX, e.clientY);
         
         
@@ -65,4 +86,7 @@ function disableCommentMode() {
 }
 
 // Initialize the anchor system
-CommentAnchor.initialize(); 
+CommentAnchor.initialize();
+
+// Load existing comments when page loads
+window.addEventListener('load', () => CommentLoader.loadComments()); 
