@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import ControlCenter from './components/ControlCenter';
+import { useDomHighlighter } from './hooks/useDomHighlighter';
+
+// Main component to manage state and effects
+const App = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // Use the custom hook to handle highlighting
+  useDomHighlighter(isEditing);
+
+  const handleToggleEditMode = (editing: boolean) => {
+    setIsEditing(editing);
+    // No need to manually clear highlight here, hook handles cleanup
+  };
+
+  // Highlight logic is now entirely within the useDomHighlighter hook
+
+  return (
+    <ControlCenter 
+      onToggleEditMode={handleToggleEditMode}
+      onClick={() => {
+        console.log('Control center (non-drag click)');
+        // Implement your control center functionality here
+      }} 
+    />
+  );
+};
 
 // Function to mount the React component into the page using Shadow DOM
-function mountControlCenter() {
+function mountApp() {
   // Ensure the host element exists
   let hostElement = document.getElementById('nohup-shadow-host');
   if (!hostElement) {
@@ -26,23 +52,18 @@ function mountControlCenter() {
     shadowRoot.appendChild(reactRootContainer);
   }
 
-  // Create a React root inside the Shadow DOM and render our component
+  // Create a React root inside the Shadow DOM and render our App
   const root = createRoot(reactRootContainer);
   root.render(
     <React.StrictMode>
-      <ControlCenter 
-        onClick={() => {
-          console.log('Control center clicked');
-          // Implement your control center functionality here
-        }} 
-      />
+      <App />
     </React.StrictMode>
   );
 }
 
 // Wait for the DOM to be fully loaded before inserting the control center
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mountControlCenter);
+  document.addEventListener('DOMContentLoaded', mountApp);
 } else {
-  mountControlCenter();
+  mountApp();
 } 
